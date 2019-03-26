@@ -11,6 +11,8 @@ using JetBrains.ReSharper.Feature.Services.Occurrences;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Search;
+using JetBrains.ReSharper.Psi.Tree;
+using JetBrains.ReSharper.Psi.VB.Util;
 using JetBrains.Util;
 
 namespace ResharperVisitorPatternNavigation
@@ -22,10 +24,10 @@ namespace ResharperVisitorPatternNavigation
         {
 
             var referenceName = dataContext.GetSelectedTreeNode<IReferenceName>();
-            var declaration = referenceName?.Reference.Resolve().DeclaredElement;
+            var declaration = (referenceName?.Reference.Resolve().DeclaredElement ?? dataContext.GetSelectedTreeNode<IDeclaration>()?.DeclaredElement) as ITypeElement;
             if (declaration != null)
             {
-                yield return new ContextNavigation("Goto &visitor", null, NavigationActionGroup.Blessed, () =>
+                yield return new ContextNavigation("Goto &Visitor", null, NavigationActionGroup.Blessed, () =>
                     {
                         var solution = dataContext.GetData(ProjectModelDataConstants.SOLUTION).NotNull();
 
@@ -48,7 +50,7 @@ namespace ResharperVisitorPatternNavigation
                         }
 
                         var occurrences = foundMethods.Select(x => new LinkedTypesOccurrence(x.DeclaredElement, OccurrenceType.Occurrence)).ToList<IOccurrence>();
-                        ShowOccurrencePopupMenu(new[] { declaration as ITypeElement }, occurrences, solution, dataContext.GetData(UIDataConstants.PopupWindowContextSource));
+                        ShowOccurrencePopupMenu(new[] { declaration }, occurrences, solution, dataContext.GetData(UIDataConstants.PopupWindowContextSource));
                     });
             }
         }

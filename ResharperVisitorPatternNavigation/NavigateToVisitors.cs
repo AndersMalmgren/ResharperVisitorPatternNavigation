@@ -3,6 +3,7 @@ using System.Linq;
 using JetBrains.Application.DataContext;
 using JetBrains.Application.UI.DataContext;
 using JetBrains.Application.UI.PopupLayout;
+using JetBrains.Diagnostics;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.DataContext;
 using JetBrains.ReSharper.Feature.Services.Navigation.ContextNavigation;

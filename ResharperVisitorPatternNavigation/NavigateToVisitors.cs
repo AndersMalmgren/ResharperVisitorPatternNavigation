@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Application.DataContext;
 using JetBrains.Application.UI.DataContext;
 using JetBrains.Application.UI.PopupLayout;
-using JetBrains.Diagnostics;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.DataContext;
 using JetBrains.ReSharper.Feature.Services.Navigation.ContextNavigation;
@@ -28,8 +28,8 @@ namespace ResharperVisitorPatternNavigation
             if (declaration != null && !(declaration is ICompiledElement))
             {
                 yield return new ContextNavigation("Goto &Visitor", null, NavigationActionGroup.Blessed, () =>
-                    {
-                        var solution = dataContext.GetData(ProjectModelDataConstants.SOLUTION).NotNull();
+                {
+                    var solution = dataContext.GetData(ProjectModelDataConstants.SOLUTION);
 
                         var foundMethods = declaration
                             .GetPsiServices()
@@ -45,11 +45,11 @@ namespace ResharperVisitorPatternNavigation
 
                         if (!foundMethods.Any())
                         {
-                            solution.GetComponent<DefaultNavigationExecutionHost>().ShowToolip(dataContext, "No visitors found");
+                            (solution ?? throw new InvalidOperationException()).GetComponent<DefaultNavigationExecutionHost>().ShowToolip(dataContext, "No visitors found");
                             return;
                         }
 
-                        var occurrences = foundMethods.Select(x => new LinkedTypesOccurrence(x.DeclaredElement.NotNull(), OccurrenceType.Occurrence)).ToList<IOccurrence>();
+                        var occurrences = foundMethods.Select(x => new LinkedTypesOccurrence(x.DeclaredElement ?? throw new InvalidOperationException(), OccurrenceType.Occurrence)).ToList<IOccurrence>();
                         ShowOccurrencePopupMenu(new[] { declaration }, occurrences, solution, dataContext.GetData(UIDataConstants.PopupWindowContextSource));
                     });
             }

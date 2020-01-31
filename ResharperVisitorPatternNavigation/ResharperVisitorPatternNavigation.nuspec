@@ -3,14 +3,14 @@
     
     <metadata>        
         <id>MdaDigital.ResharperVisitorPatternNavigation</id>
-        <version>0.0.7</version>
+        <version>0.0.8</version>
         <authors>Anders Malmgren</authors>
         <owners>Anders Malmgren</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Visitor pattern navigation</description>
         <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>                       
         <dependencies>
-            <dependency id="Wave" version="[192.0.0]" />
+            <dependency id="Wave" version="[193.0.0]" />
         </dependencies>
     </metadata>      
          

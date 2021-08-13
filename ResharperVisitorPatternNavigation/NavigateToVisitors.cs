@@ -24,8 +24,7 @@ namespace ResharperVisitorPatternNavigation
         {
 
             var referenceName = dataContext.GetSelectedTreeNode<IReferenceName>();
-            var declaration = (referenceName?.Reference.Resolve().DeclaredElement ?? dataContext.GetSelectedTreeNode<IDeclaration>()?.DeclaredElement) as ITypeElement;
-            if (declaration != null && !(declaration is ICompiledElement))
+            if ((referenceName?.Reference.Resolve().DeclaredElement ?? dataContext.GetSelectedTreeNode<IDeclaration>()?.DeclaredElement) is ITypeElement declaration && !(declaration is ICompiledElement))
             {
                 yield return new ContextNavigation("Goto &Visitor", null, NavigationActionGroup.Blessed, () =>
                 {
